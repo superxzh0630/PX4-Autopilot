@@ -1,0 +1,257 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1120" font-family="Arial, sans-serif" font-size="13">
+  <!-- Background -->
+  <rect width="900" height="1120" fill="#f8f9fa" rx="8"/>
+
+  <!-- Title -->
+  <text x="450" y="36" text-anchor="middle" font-size="17" font-weight="bold" fill="#1a1a2e">PX4 Signal Pipeline: RC Receiver → IMU → Controllers → DShot ESC</text>
+
+  <!-- ── LANE 1: RC INPUT ── -->
+  <rect x="40" y="60" width="820" height="140" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="56" y="82" font-size="12" font-weight="bold" fill="#1565c0">RC / PWM Input Lane</text>
+
+  <!-- RC Receiver box -->
+  <rect x="60" y="92" width="160" height="50" rx="6" fill="#bbdefb" stroke="#1976d2"/>
+  <text x="140" y="112" text-anchor="middle" font-weight="bold" fill="#0d47a1">RC Receiver</text>
+  <text x="140" y="128" text-anchor="middle" font-size="11" fill="#1565c0">(e.g. Radiomaster R86C)</text>
+  <text x="140" y="143" text-anchor="middle" font-size="10" fill="#555">PWM / SBUS / CRSF signal</text>
+
+  <!-- Arrow RC→RCInput -->
+  <line x1="220" y1="117" x2="265" y2="117" stroke="#1976d2" stroke-width="2" marker-end="url(#arrow_blue)"/>
+
+  <!-- RCInput driver box -->
+  <rect x="265" y="92" width="185" height="50" rx="6" fill="#bbdefb" stroke="#1976d2"/>
+  <text x="357" y="112" text-anchor="middle" font-weight="bold" fill="#0d47a1">RCInput Driver</text>
+  <text x="357" y="126" text-anchor="middle" font-size="11" fill="#1565c0">src/drivers/rc_input/RCInput.cpp</text>
+  <text x="357" y="140" text-anchor="middle" font-size="10" fill="#555">RCInput::Run() → fill_rc_in()</text>
+
+  <!-- Arrow RCInput→rc_update -->
+  <line x1="450" y1="117" x2="495" y2="117" stroke="#1976d2" stroke-width="2" marker-end="url(#arrow_blue)"/>
+  <!-- Topic label -->
+  <text x="472" y="110" text-anchor="middle" font-size="10" fill="#1565c0">input_rc</text>
+
+  <!-- rc_update box -->
+  <rect x="495" y="92" width="185" height="50" rx="6" fill="#bbdefb" stroke="#1976d2"/>
+  <text x="587" y="112" text-anchor="middle" font-weight="bold" fill="#0d47a1">rc_update Module</text>
+  <text x="587" y="126" text-anchor="middle" font-size="11" fill="#1565c0">src/modules/rc_update/</text>
+  <text x="587" y="140" text-anchor="middle" font-size="10" fill="#555">normalise channels → rc_channels</text>
+
+  <!-- Arrow rc_update→ManualControl -->
+  <line x1="680" y1="117" x2="720" y2="117" stroke="#1976d2" stroke-width="2" marker-end="url(#arrow_blue)"/>
+  <text x="700" y="110" text-anchor="middle" font-size="10" fill="#1565c0">rc_channels</text>
+
+  <!-- ManualControl box -->
+  <rect x="720" y="92" width="120" height="50" rx="6" fill="#bbdefb" stroke="#1976d2"/>
+  <text x="780" y="112" text-anchor="middle" font-weight="bold" fill="#0d47a1">ManualControl</text>
+  <text x="780" y="126" text-anchor="middle" font-size="11" fill="#1565c0">src/modules/</text>
+  <text x="780" y="140" text-anchor="middle" font-size="10" fill="#555">manual_control_setpoint</text>
+
+  <!-- ── LANE 2: IMU / SENSORS ── -->
+  <rect x="40" y="220" width="820" height="145" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="56" y="242" font-size="12" font-weight="bold" fill="#2e7d32">IMU / Sensor Estimation Lane</text>
+
+  <!-- IMU Hardware -->
+  <rect x="60" y="252" width="140" height="50" rx="6" fill="#c8e6c9" stroke="#388e3c"/>
+  <text x="130" y="272" text-anchor="middle" font-weight="bold" fill="#1b5e20">IMU Hardware</text>
+  <text x="130" y="286" text-anchor="middle" font-size="11" fill="#2e7d32">Accel + Gyro</text>
+  <text x="130" y="300" text-anchor="middle" font-size="10" fill="#555">sensor_accel / sensor_gyro</text>
+
+  <!-- Arrow IMU→VehicleIMU -->
+  <line x1="200" y1="277" x2="240" y2="277" stroke="#388e3c" stroke-width="2" marker-end="url(#arrow_green)"/>
+
+  <!-- VehicleIMU box -->
+  <rect x="240" y="252" width="185" height="50" rx="6" fill="#c8e6c9" stroke="#388e3c"/>
+  <text x="332" y="272" text-anchor="middle" font-weight="bold" fill="#1b5e20">VehicleIMU</text>
+  <text x="332" y="286" text-anchor="middle" font-size="11" fill="#2e7d32">src/modules/sensors/vehicle_imu/</text>
+  <text x="332" y="300" text-anchor="middle" font-size="10" fill="#555">VehicleIMU::Run() → vehicle_imu</text>
+
+  <!-- Arrow VehicleIMU→EKF2 -->
+  <line x1="425" y1="277" x2="465" y2="277" stroke="#388e3c" stroke-width="2" marker-end="url(#arrow_green)"/>
+  <text x="445" y="270" text-anchor="middle" font-size="10" fill="#2e7d32">vehicle_imu</text>
+
+  <!-- EKF2 box -->
+  <rect x="465" y="252" width="185" height="50" rx="6" fill="#c8e6c9" stroke="#388e3c"/>
+  <text x="557" y="272" text-anchor="middle" font-weight="bold" fill="#1b5e20">EKF2 Estimator</text>
+  <text x="557" y="286" text-anchor="middle" font-size="11" fill="#2e7d32">src/modules/ekf2/EKF2.cpp</text>
+  <text x="557" y="300" text-anchor="middle" font-size="10" fill="#555">EKF2::Run() — Kalman filter</text>
+
+  <!-- EKF2 output labels -->
+  <text x="680" y="264" font-size="10" fill="#2e7d32">vehicle_attitude</text>
+  <text x="680" y="278" font-size="10" fill="#2e7d32">vehicle_local_position</text>
+  <text x="680" y="292" font-size="10" fill="#2e7d32">vehicle_angular_velocity</text>
+  <line x1="650" y1="277" x2="678" y2="277" stroke="#388e3c" stroke-width="2" marker-end="url(#arrow_green)"/>
+
+  <!-- ── LANE 3: POSITION CONTROLLER ── -->
+  <rect x="40" y="385" width="820" height="120" rx="8" fill="#fff3e0" stroke="#e65100" stroke-width="1.5"/>
+  <text x="56" y="407" font-size="12" font-weight="bold" fill="#e65100">Position Controller Lane  (active in Position/Mission modes)</text>
+
+  <!-- Inputs to Pos Control -->
+  <text x="60" y="430" font-size="10" fill="#e65100">trajectory_setpoint</text>
+  <text x="60" y="444" font-size="10" fill="#e65100">vehicle_local_position</text>
+  <line x1="190" y1="437" x2="225" y2="437" stroke="#e65100" stroke-width="2" marker-end="url(#arrow_orange)"/>
+
+  <!-- Pos Controller box -->
+  <rect x="225" y="415" width="240" height="60" rx="6" fill="#ffe0b2" stroke="#f57c00"/>
+  <text x="345" y="435" text-anchor="middle" font-weight="bold" fill="#bf360c">MulticopterPositionControl</text>
+  <text x="345" y="450" text-anchor="middle" font-size="11" fill="#e65100">src/modules/mc_pos_control/</text>
+  <text x="345" y="464" text-anchor="middle" font-size="10" fill="#555">MulticopterPositionControl::Run()</text>
+  <text x="345" y="477" text-anchor="middle" font-size="10" fill="#555">PositionControl — PID on position/velocity</text>
+
+  <!-- Arrow Pos→vehicle_attitude_setpoint -->
+  <line x1="465" y1="445" x2="510" y2="445" stroke="#e65100" stroke-width="2" marker-end="url(#arrow_orange)"/>
+  <text x="487" y="438" text-anchor="middle" font-size="10" fill="#e65100">vehicle_attitude_setpoint</text>
+
+  <text x="515" y="437" font-size="10" fill="#e65100">(desired tilt</text>
+  <text x="515" y="451" font-size="10" fill="#e65100">+ thrust)</text>
+
+  <!-- ── LANE 4: ATTITUDE CONTROLLER ── -->
+  <rect x="40" y="525" width="820" height="130" rx="8" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.5"/>
+  <text x="56" y="547" font-size="12" font-weight="bold" fill="#6a1b9a">Attitude Controller Lane</text>
+
+  <!-- Inputs -->
+  <text x="60" y="570" font-size="10" fill="#6a1b9a">vehicle_attitude</text>
+  <text x="60" y="584" font-size="10" fill="#6a1b9a">vehicle_attitude_setpoint</text>
+  <text x="60" y="598" font-size="10" fill="#6a1b9a">manual_control_setpoint</text>
+  <line x1="200" y1="584" x2="235" y2="584" stroke="#6a1b9a" stroke-width="2" marker-end="url(#arrow_purple)"/>
+
+  <!-- Att Controller box -->
+  <rect x="235" y="558" width="240" height="65" rx="6" fill="#e1bee7" stroke="#8e24aa"/>
+  <text x="355" y="578" text-anchor="middle" font-weight="bold" fill="#4a148c">MulticopterAttitudeControl</text>
+  <text x="355" y="593" text-anchor="middle" font-size="11" fill="#6a1b9a">src/modules/mc_att_control/</text>
+  <text x="355" y="607" text-anchor="middle" font-size="10" fill="#555">MulticopterAttitudeControl::Run()</text>
+  <text x="355" y="620" text-anchor="middle" font-size="10" fill="#555">generate_attitude_setpoint()  AttitudeControl lib</text>
+
+  <!-- Arrow to rates_setpoint -->
+  <line x1="475" y1="590" x2="515" y2="590" stroke="#6a1b9a" stroke-width="2" marker-end="url(#arrow_purple)"/>
+  <text x="495" y="582" text-anchor="middle" font-size="10" fill="#6a1b9a">vehicle_rates_setpoint</text>
+
+  <text x="520" y="582" font-size="10" fill="#6a1b9a">(desired roll/</text>
+  <text x="520" y="596" font-size="10" fill="#6a1b9a">pitch/yaw rates)</text>
+
+  <!-- ── LANE 5: RATE CONTROLLER ── -->
+  <rect x="40" y="675" width="820" height="130" rx="8" fill="#fce4ec" stroke="#880e4f" stroke-width="1.5"/>
+  <text x="56" y="697" font-size="12" font-weight="bold" fill="#880e4f">Rate Controller Lane</text>
+
+  <!-- Inputs -->
+  <text x="60" y="720" font-size="10" fill="#880e4f">vehicle_rates_setpoint</text>
+  <text x="60" y="734" font-size="10" fill="#880e4f">vehicle_angular_velocity</text>
+  <line x1="200" y1="727" x2="235" y2="727" stroke="#880e4f" stroke-width="2" marker-end="url(#arrow_red)"/>
+
+  <!-- Rate Controller box -->
+  <rect x="235" y="703" width="240" height="65" rx="6" fill="#f8bbd0" stroke="#c2185b"/>
+  <text x="355" y="723" text-anchor="middle" font-weight="bold" fill="#880e4f">MulticopterRateControl</text>
+  <text x="355" y="738" text-anchor="middle" font-size="11" fill="#880e4f">src/modules/mc_rate_control/</text>
+  <text x="355" y="752" text-anchor="middle" font-size="10" fill="#555">MulticopterRateControl::Run()</text>
+  <text x="355" y="765" text-anchor="middle" font-size="10" fill="#555">RateControl lib — PID on angular rates</text>
+
+  <!-- Arrow to actuator_controls_0 -->
+  <line x1="475" y1="735" x2="515" y2="735" stroke="#880e4f" stroke-width="2" marker-end="url(#arrow_red)"/>
+  <text x="495" y="726" text-anchor="middle" font-size="10" fill="#880e4f">vehicle_thrust_setpoint</text>
+  <text x="495" y="738" text-anchor="middle" font-size="10" fill="#880e4f">vehicle_torque_setpoint</text>
+
+  <text x="520" y="727" font-size="10" fill="#880e4f">(roll, pitch,</text>
+  <text x="520" y="741" font-size="10" fill="#880e4f">yaw, thrust)</text>
+
+  <!-- ── LANE 6: MIXER / CONTROL ALLOCATOR ── -->
+  <rect x="40" y="825" width="820" height="100" rx="8" fill="#e0f7fa" stroke="#006064" stroke-width="1.5"/>
+  <text x="56" y="847" font-size="12" font-weight="bold" fill="#006064">Control Allocator / Mixer Lane</text>
+
+  <!-- Inputs -->
+  <text x="60" y="872" font-size="10" fill="#006064">vehicle_thrust_setpoint</text>
+  <text x="60" y="886" font-size="10" fill="#006064">vehicle_torque_setpoint</text>
+  <line x1="200" y1="879" x2="235" y2="879" stroke="#006064" stroke-width="2" marker-end="url(#arrow_teal)"/>
+
+  <!-- Control Allocator box -->
+  <rect x="235" y="855" width="240" height="55" rx="6" fill="#b2ebf2" stroke="#00838f"/>
+  <text x="355" y="875" text-anchor="middle" font-weight="bold" fill="#006064">control_allocator</text>
+  <text x="355" y="890" text-anchor="middle" font-size="11" fill="#006064">src/modules/control_allocator/</text>
+  <text x="355" y="904" text-anchor="middle" font-size="10" fill="#555">Geometry matrix → per-motor commands</text>
+
+  <!-- Arrow to actuator_motors -->
+  <line x1="475" y1="882" x2="515" y2="882" stroke="#006064" stroke-width="2" marker-end="url(#arrow_teal)"/>
+  <text x="495" y="873" text-anchor="middle" font-size="10" fill="#006064">actuator_motors</text>
+  <text x="495" y="885" text-anchor="middle" font-size="10" fill="#006064">actuator_servos</text>
+
+  <!-- ── LANE 7: DSHOT / ESC OUTPUT ── -->
+  <rect x="40" y="945" width="820" height="130" rx="8" fill="#f9fbe7" stroke="#558b2f" stroke-width="1.5"/>
+  <text x="56" y="967" font-size="12" font-weight="bold" fill="#558b2f">DShot / ESC Output Lane</text>
+
+  <!-- Inputs -->
+  <text x="60" y="992" font-size="10" fill="#558b2f">actuator_motors</text>
+  <line x1="150" y1="992" x2="185" y2="992" stroke="#558b2f" stroke-width="2" marker-end="url(#arrow_lime)"/>
+
+  <!-- DShot driver box -->
+  <rect x="185" y="972" width="210" height="55" rx="6" fill="#f0f4c3" stroke="#7cb342"/>
+  <text x="290" y="992" text-anchor="middle" font-weight="bold" fill="#33691e">DShot Driver</text>
+  <text x="290" y="1007" text-anchor="middle" font-size="11" fill="#558b2f">src/drivers/dshot/DShot.cpp</text>
+  <text x="290" y="1021" text-anchor="middle" font-size="10" fill="#555">DShot::Run() — mixer_module lib</text>
+
+  <!-- Arrow DShot→ESC -->
+  <line x1="395" y1="999" x2="435" y2="999" stroke="#558b2f" stroke-width="2" marker-end="url(#arrow_lime)"/>
+  <text x="415" y="992" text-anchor="middle" font-size="10" fill="#558b2f">DShot frames</text>
+  <text x="415" y="1005" text-anchor="middle" font-size="10" fill="#558b2f">(0–1999)</text>
+
+  <!-- ESC box -->
+  <rect x="435" y="972" width="140" height="55" rx="6" fill="#f0f4c3" stroke="#7cb342"/>
+  <text x="505" y="992" text-anchor="middle" font-weight="bold" fill="#33691e">ESC</text>
+  <text x="505" y="1007" text-anchor="middle" font-size="11" fill="#558b2f">DShot150/300/600</text>
+  <text x="505" y="1021" text-anchor="middle" font-size="10" fill="#555">actuator_outputs published</text>
+
+  <!-- Arrow ESC→Motor -->
+  <line x1="575" y1="999" x2="615" y2="999" stroke="#558b2f" stroke-width="2" marker-end="url(#arrow_lime)"/>
+
+  <!-- Motor box -->
+  <rect x="615" y="972" width="120" height="55" rx="6" fill="#f0f4c3" stroke="#7cb342"/>
+  <text x="675" y="995" text-anchor="middle" font-weight="bold" fill="#33691e">BLDC Motor</text>
+  <text x="675" y="1010" text-anchor="middle" font-size="10" fill="#555">RPM ∝ throttle</text>
+
+  <!-- Telemetry feedback arrow -->
+  <line x1="505" y1="1027" x2="505" y2="1058" stroke="#888" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow_grey)"/>
+  <text x="560" y="1048" font-size="10" fill="#555">esc_status (telemetry)</text>
+  <text x="560" y="1062" font-size="10" fill="#555">RPM, temperature, voltage</text>
+
+  <!-- ──────────────────────────────────────────────────────── -->
+  <!-- Vertical inter-lane arrows -->
+
+  <!-- RC lane → Att lane (manual_control_setpoint) -->
+  <line x1="780" y1="142" x2="780" y2="385" stroke="#1976d2" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow_blue)"/>
+  <text x="795" y="260" font-size="10" fill="#1565c0">manual_control_setpoint</text>
+  <!-- small curve label -->
+  <text x="795" y="275" font-size="10" fill="#555">(to att controller)</text>
+
+  <!-- EKF2 → Att Controller -->
+  <line x1="650" y1="302" x2="650" y2="525" stroke="#388e3c" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow_green)"/>
+  <text x="655" y="415" font-size="10" fill="#1b5e20">vehicle_attitude</text>
+  <text x="655" y="429" font-size="10" fill="#1b5e20">+ angular_velocity</text>
+
+  <!-- EKF2 → Pos Controller -->
+  <line x1="600" y1="302" x2="450" y2="385" stroke="#388e3c" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow_green)"/>
+  <text x="500" y="348" font-size="10" fill="#1b5e20">vehicle_local_position</text>
+
+  <!-- Pos Controller output → Att lane -->
+  <line x1="345" y1="475" x2="345" y2="525" stroke="#e65100" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow_orange)"/>
+  <text x="350" y="505" font-size="10" fill="#e65100">vehicle_attitude_setpoint</text>
+
+  <!-- Att → Rate -->
+  <line x1="355" y1="623" x2="355" y2="675" stroke="#6a1b9a" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow_purple)"/>
+  <text x="360" y="652" font-size="10" fill="#6a1b9a">vehicle_rates_setpoint</text>
+
+  <!-- Rate → Mixer -->
+  <line x1="355" y1="768" x2="355" y2="825" stroke="#880e4f" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow_red)"/>
+  <text x="360" y="800" font-size="10" fill="#880e4f">thrust + torque setpoints</text>
+
+  <!-- Mixer → DShot -->
+  <line x1="355" y1="910" x2="355" y2="945" stroke="#006064" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow_teal)"/>
+  <text x="360" y="930" font-size="10" fill="#006064">actuator_motors</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrow_blue"   markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#1976d2"/></marker>
+    <marker id="arrow_green"  markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#388e3c"/></marker>
+    <marker id="arrow_orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#e65100"/></marker>
+    <marker id="arrow_purple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#6a1b9a"/></marker>
+    <marker id="arrow_red"    markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#880e4f"/></marker>
+    <marker id="arrow_teal"   markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#006064"/></marker>
+    <marker id="arrow_lime"   markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#558b2f"/></marker>
+    <marker id="arrow_grey"   markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#888"/></marker>
+  </defs>
+</svg>
