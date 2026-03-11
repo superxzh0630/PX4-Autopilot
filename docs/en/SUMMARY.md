@@ -454,6 +454,7 @@
     - [Flight Modes](concept/flight_modes.md)
     - [Flight Tasks](concept/flight_tasks.md)
     - [Control Allocation](concept/control_allocation.md)
+    - [RC / IMU to ESC Signal Pipeline](concept/rc_imu_to_esc_signal_pipeline.md)
     - [PWM limit state machine](concept/pwm_limit.md)
     - [System Startup](concept/system_startup.md)
     - [SD Card Layout](concept/sd_card_layout.md)
