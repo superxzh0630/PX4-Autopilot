@@ -445,6 +445,7 @@
     - [Building the Code](dev_setup/building_px4.md)
     - [Writing your First Application](modules/hello_sky.md)
     - [Application/Module Template](modules/module_template.md)
+    - [Custom Drone Modules](modules/custom_drone_modules.md)
   - [Concepts](concept/index.md)
     - [PX4 System Architecture](concept/px4_systems_architecture.md)
     - [PX4 Flight Stack Architecture](concept/architecture.md)
