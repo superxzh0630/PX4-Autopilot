@@ -8,8 +8,55 @@ uORB is implemented in the [`uorb` module](../modules/modules_communication.md#u
 It is started automatically (with `uorb start`) early in the PX4 boot sequence, as many applications depend on it.
 Unit tests can be started with `uorb_tests`.
 
-This document explains how to add uORB message definitions and their corresponding topic(s), how to use reference a topic in code, and how to view topics as they change in PX4.
+This document explains how to add uORB message definitions and their corresponding topic(s), how to reference a topic in code, and how to view topics as they change in PX4.
 The [First Application Tutorial (Hello Sky)](../modules/hello_sky.md) provides more comprehensive instructions for how to use topics in C++.
+
+## Source File Locations
+
+The uORB system spans three distinct areas of the repository.
+
+### Message Definitions (`msg/`)
+
+All uORB message definition (`.msg`) files live under the [`msg/`](https://github.com/PX4/PX4-Autopilot/tree/main/msg) directory:
+
+| Path | Contents |
+|------|----------|
+| [`msg/`](https://github.com/PX4/PX4-Autopilot/tree/main/msg) | Non-versioned message definitions and the `CMakeLists.txt` that lists every `.msg` file to be compiled. |
+| [`msg/versioned/`](https://github.com/PX4/PX4-Autopilot/tree/main/msg/versioned) | Current (highest) version of each versioned message — used by ROS 2 integrations that must stay compatible across releases. |
+| [`msg/px4_msgs_old/`](https://github.com/PX4/PX4-Autopilot/tree/main/msg/px4_msgs_old) | Archive of older versioned message files, renamed with a version-number suffix, used by the [ROS 2 Message Translation Node](../ros2/px4_ros2_msg_translation_node.md). |
+
+[msg/CMakeLists.txt](https://github.com/PX4/PX4-Autopilot/blob/main/msg/CMakeLists.txt) lists every `.msg` file that is processed at build time and invokes the code-generation scripts described below.
+
+### Publish/Subscribe Implementation (`platforms/common/uORB/`)
+
+The uORB pub/sub engine lives in [`platforms/common/uORB/`](https://github.com/PX4/PX4-Autopilot/tree/main/platforms/common/uORB):
+
+| File(s) | Purpose |
+|---------|---------|
+| `uORB.h` / `uORB.cpp` | Low-level C API (`orb_advertise`, `orb_publish`, `orb_subscribe`, `orb_copy`, …). |
+| `uORBManager.hpp` / `.cpp` | Central broker — advertises and unadvertises topics, routes publications to subscribers, manages multi-instance topics. |
+| `uORBDeviceMaster.hpp` / `.cpp` | Owns all per-topic device nodes; creates and destroys them on demand. |
+| `uORBDeviceNode.hpp` / `.cpp` | Per-topic node — stores the latest published message, tracks subscriber generation numbers, and notifies waiters. |
+| `Publication.hpp`, `PublicationMulti.hpp` | C++ template wrappers for publishing to a single or multi-instance topic. |
+| `Subscription.hpp` / `.cpp` | Base subscription class with `updated()` and `update()` helpers. |
+| `SubscriptionCallback.hpp` | Event-driven subscriber — calls a callback when a new message arrives. |
+| `SubscriptionBlocking.hpp` | Blocking subscriber — wakes a thread when data is available. |
+| `SubscriptionInterval.hpp` / `.cpp` | Rate-limited subscriber — delivers updates no faster than a configured interval. |
+| `SubscriptionMultiArray.hpp` | Subscribes to all instances of a multi-instance topic at once. |
+| `uORBTopics.h` | Auto-generated header listing all topic IDs (`ORB_ID(…)` enum). |
+| `CMakeLists.txt` | Builds the `uORB` (and, for protected NuttX builds, `uORB_kernel`) libraries. |
+
+### Code-Generation Tools (`Tools/msg/`)
+
+The Python scripts that turn `.msg` files into C/C++ headers and source files live in [`Tools/msg/`](https://github.com/PX4/PX4-Autopilot/tree/main/Tools/msg):
+
+| File | Purpose |
+|------|---------|
+| `px_generate_uorb_topic_files.py` | Main generator — called by `msg/CMakeLists.txt`; processes every `.msg` file through the EmPy templates. |
+| `px_generate_uorb_topic_helper.py` | Helper module used by the generator — maps `.msg` types to C types (`float32` → `float`, `uint8` → `uint8_t`, …). |
+| `px_generate_uorb_compressed_fields.py` | Generates compressed field descriptors used for bandwidth-efficient logging. |
+| `generate_msg_docs.py` | Produces the auto-generated Markdown message reference under `docs/en/msg_docs/`. |
+| `templates/uorb/` | [EmPy](https://pypi.org/project/empy/) templates (`msg.h.em`, `msg.cpp.em`, `uORBTopics.hpp.em`, …) that the generator expands for each message. |
 
 ## Adding a New Topic
 
